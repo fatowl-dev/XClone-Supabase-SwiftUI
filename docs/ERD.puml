@@ -1,0 +1,45 @@
+@startuml ERD
+
+' hide the spot
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "auth.users" as User {
+  *id : uuid <<generated>>
+  --
+}
+
+entity "profile" as Profile {
+  *id : int8 <<generated>>
+  --
+  *user_id : uuid <<FK>>
+  nickname: text
+  *created_at: timestamptz
+  updated_at: timestamptz
+}
+
+entity "post" as Post {
+  *id : int8 <<generated>>
+  --
+  user_id : uuid <<FK>>
+  *content : text
+  *created_at: timestamptz
+  image_url: text
+}
+
+entity "like" as Like {
+  *id : int8 <<generated>>
+  --
+  user_id : uuid <<FK>>
+  *post_id : int8 <<FK>>
+  *created_at: timestamptz
+}
+
+User ||--|| Profile
+User |o--o{ Post
+User |o--o{ Like
+Post ||--o{ Like
+
+@enduml
